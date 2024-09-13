@@ -7,8 +7,12 @@ resource "aws_instance" "web" {
   tags = {
     Name = var.values[count.index].component
   }
-
+output "name" {
+  value       = var.values[count.index].component
 }
+}
+
+
 
 resource "null_resource" "ansible" {
   depends_on = [aws_instance.web, aws_route53_record.roboshop]
