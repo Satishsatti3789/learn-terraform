@@ -68,9 +68,9 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_iam_policy" "policy" {
-  name        = "${var.name}-${var.env}-ssm-pm-policy"
+  name        = "${var.name}-dev-ssm-pm-policy"
   path        = "/"
-  description = "${var.name}-${var.env}-ssm-pm-policy"
+  description = "${var.name}-dev-ssm-pm-policy"
 
   policy = jsonencode({
     Version   = "2012-10-17",
@@ -97,7 +97,7 @@ resource "aws_iam_policy" "policy" {
 ## Iam Role
 
 resource "aws_iam_role" "role" {
-  name = "${var.name}-${var.env}-ec2-role"
+  name = "${var.name}-dev-ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -115,7 +115,7 @@ resource "aws_iam_role" "role" {
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = "${var.name}-${var.env}-ec2-role"
+  name = "${var.name}-dev-ec2-role"
   role = aws_iam_role.role.name
 }
 
