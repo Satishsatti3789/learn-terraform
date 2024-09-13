@@ -1,10 +1,11 @@
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.centos.id
-  instance_type          = "t3.small"
+  count     = length(var.values)
+  instance_type          = var.values[count.index].instance_type
   vpc_security_group_ids = [aws_security_group.sg.id]
 
   tags = {
-    Name = var.name
+    Name = var.values[count.index].name
   }
 
 }
@@ -22,7 +23,7 @@ resource "null_resource" "ansible" {
 
     inline = [
       "sudo labauto ansible",
-      "ansible-pull -i localhost, -U https://github.com/satishsatti3789/ansible-v1 main.yml -e env=dev -e role_name=${var.name}"
+      "ansible-pull -i localhost, -U https://github.com/satishsatti3789/ansible-v1 main.yml -e env=dev -e role_name=${var.values[count.index].name}"
     ]
   }
 }
@@ -43,7 +44,7 @@ data "aws_ami" "centos" {
 
 
 resource "aws_security_group" "sg" {
-  name        = var.name
+  name        = var.values[count.index].name
   description = "Allow TLS inbound traffic"
 
   ingress {
@@ -61,8 +62,23 @@ resource "aws_security_group" "sg" {
   }
 
   tags = {
-    Name = var.name
+    Name = var.values[count.index].name
   }
 }
 
-variable "name" {}
+
+variable "values" {
+  default = [
+    { name = "frontend", instance_type = "t3.small" },
+    { name = "catalogue", instance_type = "t2.micro" },
+    { name = "cart", instance_type = "t2.micro" },
+    { name = "user", instance_type = "t2.micro" },
+    { name = "redis", instance_type = "t2.micro" },
+    { name = "rabbitmq", instance_type = "t2.micro" },
+    { name = "mysql", instance_type = "t2.micro" },
+    { name = "mongodb", instance_type = "t2.micro" },
+    { name = "dispatch", instance_type = "t2.micro" },
+    { name = "payment", instance_type = "t3.small" },
+    { name = "shipping", instance_type = "t3.small" },
+  ]
+}
