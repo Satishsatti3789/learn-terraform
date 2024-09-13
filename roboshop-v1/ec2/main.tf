@@ -1,11 +1,11 @@
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.centos.id
   count     = length(var.values)
-  instance_type          = var.values[count.index].instance_type
+  instance_type          = var.values[count.index].instance
   vpc_security_group_ids = [aws_security_group.sg.id]
 
   tags = {
-    Name = var.values[count.index].name
+    Name = var.values[count.index].component
   }
 
 }
@@ -23,14 +23,14 @@ resource "null_resource" "ansible" {
 
     inline = [
       "sudo labauto ansible",
-      "ansible-pull -i localhost, -U https://github.com/satishsatti3789/ansible-v1 main.yml -e env=dev -e role_name=${var.values[count.index].name}"
+      "ansible-pull -i localhost, -U https://github.com/satishsatti3789/ansible-v1 main.yml -e env=dev -e role_name=${var.values[count.index].component}"
     ]
   }
 }
 
 resource "aws_route53_record" "roboshop" {
   zone_id = "Z014790038ULCSA62ANIV"
-  name    = "${var.values[count.index].name}-dev"
+  name    = "${var.values[count.index].component}-dev"
   type    = "A"
   ttl     = 30
   records = [aws_instance.web.private_ip]
@@ -44,7 +44,7 @@ data "aws_ami" "centos" {
 
 
 resource "aws_security_group" "sg" {
-  name        = var.values[count.index].name
+  name        = var.values[count.index].component
   description = "Allow TLS inbound traffic"
 
   ingress {
@@ -62,23 +62,23 @@ resource "aws_security_group" "sg" {
   }
 
   tags = {
-    Name = var.values[count.index].name
+    Name = var.values[count.index].component
   }
 }
 
 
 variable "values" {
   default = [
-    { name = "frontend", instance_type = "t3.small" },
-    { name = "catalogue", instance_type = "t2.micro" },
-    { name = "cart", instance_type = "t2.micro" },
-    { name = "user", instance_type = "t2.micro" },
-    { name = "redis", instance_type = "t2.micro" },
-    { name = "rabbitmq", instance_type = "t2.micro" },
-    { name = "mysql", instance_type = "t2.micro" },
-    { name = "mongodb", instance_type = "t2.micro" },
-    { name = "dispatch", instance_type = "t2.micro" },
-    { name = "payment", instance_type = "t3.small" },
-    { name = "shipping", instance_type = "t3.small" },
+    { component = "frontend", instance = "t3.small" },
+    { component = "catalogue", instance = "t2.micro" },
+    { component = "cart", instance = "t2.micro" },
+    { component = "user", instance = "t2.micro" },
+    { component = "redis", instance = "t2.micro" },
+    { component = "rabbitmq", instance = "t2.micro" },
+    { component = "mysql", instance = "t2.micro" },
+    { component = "mongodb", instance = "t2.micro" },
+    { component = "dispatch", instance = "t2.micro" },
+    { component = "payment", instance = "t3.small" },
+    { component = "shipping", instance = "t3.small" },
   ]
 }
