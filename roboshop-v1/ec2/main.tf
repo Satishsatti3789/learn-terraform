@@ -87,7 +87,8 @@ resource "aws_iam_policy" "policy" {
         ],
         Resource  = [
           "arn:aws:ssm:us-east-1:533267281718:parameter/roboshop.dev.${var.name}.*",
-          "arn:aws:ssm:us-east-1:533267281718:parameter/roboshop*"
+          "arn:aws:ssm:us-east-1:533267281718:parameter/roboshop*",
+          "arn:aws:ssm:us-east-1:533267281718:parameter/roboshop.nexus.*
         ]
       }
     ]
