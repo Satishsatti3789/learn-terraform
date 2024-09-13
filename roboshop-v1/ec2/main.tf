@@ -30,7 +30,7 @@ resource "null_resource" "ansible" {
 
 resource "aws_route53_record" "roboshop" {
   zone_id = "Z014790038ULCSA62ANIV"
-  name    = "${var.name}-dev"
+  name    = "${var.values[count.index].name}-dev"
   type    = "A"
   ttl     = 30
   records = [aws_instance.web.private_ip]
