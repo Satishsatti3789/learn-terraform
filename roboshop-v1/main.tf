@@ -2,7 +2,6 @@ module "instances" {
   for_each = var.instances
   source   = "./ec2"
   name     = each.key
-  env = var.dev
 }
 
 variable "instances" {
@@ -21,7 +20,3 @@ variable "instances" {
 
   }
 }
-variable "dev" {
-  default = dev
-}
-
