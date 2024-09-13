@@ -22,13 +22,13 @@ resource "null_resource" "ansible" {
 
     inline = [
       "sudo labauto ansible",
-      "ansible-pull -i localhost, -U https://github.com/raghudevopsb73/roboshop-ansible main.yml -e env=dev -e role_name=${var.name}"
+      "ansible-pull -i localhost, -U https://github.com/satishsatti3789/ansible-v1 main.yml -e env=dev -e role_name=${var.name}"
     ]
   }
 }
 
 resource "aws_route53_record" "www" {
-  zone_id = "Z055331734ICV430E01P7"
+  zone_id = "Z014790038ULCSA62ANIV"
   name    = "${var.name}-dev"
   type    = "A"
   ttl     = 30
