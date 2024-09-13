@@ -1,7 +1,7 @@
 module "instances" {
   for_each = var.instances
   source   = "./ec2"
-  name     = module.aws_instance.name
+  name     = each.key
 }
 
 variable "instances" {
